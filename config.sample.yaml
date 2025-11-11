@@ -1,0 +1,239 @@
+# AI Newsletter Configuration File - SAMPLE
+# Copy this file to config.yaml and customize with your settings
+
+# Email Settings
+email:
+  recipient: "your-email@gmail.com"  # Your email address
+  sender: "your-email@gmail.com"     # Same as recipient for Gmail
+  sender_name: "AI Newsletter"
+  subject_prefix: "AI Weekly Digest"
+
+  # Gmail SMTP settings
+  smtp_server: "smtp.gmail.com"
+  smtp_port: 587
+  # IMPORTANT: Create a Gmail App Password and paste it here
+  # Instructions: https://support.google.com/accounts/answer/185833
+  smtp_password: "YOUR_APP_PASSWORD_HERE"
+
+# Schedule Settings
+schedule:
+  days: ["Monday", "Thursday"]  # Days to send newsletter
+  time: "08:00"  # Time in HH:MM format (24-hour)
+  timezone: "America/Los_Angeles"  # Your timezone
+
+# Content Settings
+content:
+  days_to_look_back: 4  # How many days of content to include
+  min_items_per_category: 5  # Minimum items to include per category
+  max_items_per_category: 10  # Maximum items to include per category
+  include_images: true
+  include_screenshots: true
+
+  # Tone and style
+  tone: "neutral"  # Options: neutral, opinionated, casual
+  technical_level: "high"  # Options: low, medium, high (affects jargon usage)
+
+# Categories to track
+categories:
+  models:
+    enabled: true
+    priority: 1
+    keywords:
+      - "GPT"
+      - "LLM"
+      - "model release"
+      - "open source model"
+      - "gemini"
+      - "claude"
+      - "llama"
+      - "mistral"
+      - "stable diffusion"
+      - "DALL-E"
+      - "whisper"
+      - "multimodal"
+      - "vision model"
+      - "audio model"
+
+  creative_applications:
+    enabled: true
+    priority: 2
+    keywords:
+      - "AI art"
+      - "creative AI"
+      - "generative"
+      - "AI music"
+      - "AI video"
+      - "AI animation"
+      - "prompt engineering"
+      - "AI storytelling"
+      - "creative workflow"
+
+  productivity_tools:
+    enabled: true
+    priority: 3
+    keywords:
+      - "AI productivity"
+      - "AI assistant"
+      - "automation"
+      - "AI workflow"
+      - "coding assistant"
+      - "AI IDE"
+      - "developer tools"
+      - "AI agent"
+
+  product_launches:
+    enabled: true
+    priority: 4
+    focus_stage: "early"  # Options: early, all, enterprise
+    include_big_tech: true
+    keywords:
+      - "launch"
+      - "beta"
+      - "alpha"
+      - "new product"
+      - "AI startup"
+      - "funding"
+
+# Sources Configuration
+sources:
+  # Company Blogs
+  company_blogs:
+    enabled: true
+    urls:
+      - url: "https://openai.com/blog"
+        name: "OpenAI Blog"
+        rss: "https://openai.com/blog/rss.xml"
+      - url: "https://www.anthropic.com/news"
+        name: "Anthropic News"
+      - url: "https://blog.google/technology/ai/"
+        name: "Google AI Blog"
+        rss: "https://blog.google/technology/ai/rss"
+      - url: "https://ai.meta.com/blog/"
+        name: "Meta AI Blog"
+      - url: "https://www.deepmind.com/blog"
+        name: "DeepMind Blog"
+      - url: "https://mistral.ai/news/"
+        name: "Mistral AI News"
+      - url: "https://cohere.com/blog"
+        name: "Cohere Blog"
+      - url: "https://stability.ai/news"
+        name: "Stability AI News"
+
+  # Research & Papers
+  research:
+    enabled: true
+    sources:
+      - name: "arXiv AI"
+        query: "cat:cs.AI OR cat:cs.LG OR cat:cs.CV OR cat:cs.CL"
+        max_results: 20
+      - name: "Papers with Code"
+        url: "https://paperswithcode.com/"
+      - name: "Hugging Face Papers"
+        url: "https://huggingface.co/papers"
+
+  # Social Media
+  twitter:
+    enabled: false  # Set to true if you set up Twitter API
+    accounts:
+      - "@OpenAI"
+      - "@AnthropicAI"
+      - "@GoogleAI"
+      - "@MetaAI"
+      - "@StabilityAI"
+      - "@MistralAI"
+    # Requires Twitter API credentials (optional)
+    api_key: ""
+    api_secret: ""
+
+  reddit:
+    enabled: true
+    subreddits:
+      - "MachineLearning"
+      - "LocalLLaMA"
+      - "StableDiffusion"
+      - "ChatGPT"
+      - "ArtificialInteligence"
+      - "singularity"
+    min_upvotes: 50  # Minimum upvotes to include
+
+  hackernews:
+    enabled: true
+    min_score: 50  # Minimum score to include
+    keywords:
+      - "AI"
+      - "LLM"
+      - "GPT"
+      - "machine learning"
+      - "neural network"
+
+  producthunt:
+    enabled: true
+    categories:
+      - "AI"
+      - "Developer Tools"
+      - "Productivity"
+    min_upvotes: 100
+
+  github:
+    enabled: true
+    trending_period: "weekly"  # daily, weekly, monthly
+    languages:
+      - "Python"
+      - "JavaScript"
+      - "TypeScript"
+    topics:
+      - "artificial-intelligence"
+      - "machine-learning"
+      - "deep-learning"
+      - "llm"
+      - "generative-ai"
+
+  newsletters:
+    enabled: false  # Set to true to scrape other newsletters
+    sources:
+      - name: "Ben's Bites"
+        url: "https://www.bensbites.co/"
+      - name: "TLDR AI"
+        url: "https://tldr.tech/ai"
+      - name: "The Batch"
+        url: "https://www.deeplearning.ai/the-batch/"
+      - name: "Import AI"
+        url: "https://jack-clark.net/"
+
+# Content Filtering
+filtering:
+  # Exclude certain topics/keywords
+  exclude_keywords:
+    - "crypto"
+    - "blockchain"
+    - "NFT"
+
+  # Quality filters
+  require_engagement: true  # Require minimum social engagement
+  deduplicate: true  # Remove duplicate stories across sources
+
+  # Source credibility
+  trusted_domains:
+    - "arxiv.org"
+    - "openai.com"
+    - "anthropic.com"
+    - "google.com"
+    - "deepmind.com"
+    - "huggingface.co"
+    - "github.com"
+
+# Advanced Settings
+advanced:
+  # Caching to avoid re-scraping
+  cache_directory: "./cache"
+  cache_expiry_hours: 48
+
+  # Rate limiting
+  request_delay_seconds: 1  # Delay between requests to be polite
+
+  # Debug mode
+  debug_mode: false  # Set to true for verbose logging
+  save_raw_data: false  # Save scraped data for debugging
+
+  # Parallel processing
+  max_workers: 5  # Number of parallel scrapers

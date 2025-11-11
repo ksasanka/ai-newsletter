@@ -1,0 +1,23 @@
+# AI Newsletter Dependencies
+
+# Core dependencies
+PyYAML==6.0.1
+requests==2.31.0
+beautifulsoup4==4.12.3
+feedparser==6.0.11
+pytz==2024.1
+
+# HTML parsing
+lxml==5.1.0
+
+# Email
+secure-smtplib==0.1.1
+
+# Optional: For better rate limiting and caching
+cachetools==5.3.2
+
+# Optional: For Twitter API (if you want to use it)
+# tweepy==4.14.0
+
+# Optional: For better logging
+colorlog==6.8.2
