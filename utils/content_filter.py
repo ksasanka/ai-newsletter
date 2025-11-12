@@ -89,11 +89,27 @@ class ContentFilter:
 
     def _has_engagement(self, item: Dict) -> bool:
         """Check if item has minimum engagement"""
-        # Check various engagement metrics
-        upvotes = item.get('upvotes', 0)
-        score = item.get('score', 0)
-        stars = item.get('stars', 0)
-        comments = item.get('comments', 0)
+        # Check various engagement metrics, converting to int safely
+        def to_int(value):
+            """Convert value to int, handling strings and None"""
+            if value is None:
+                return 0
+            if isinstance(value, str):
+                # Remove common formatting (commas, k for thousands, etc.)
+                value = value.replace(',', '').replace('k', '000').replace('K', '000')
+                try:
+                    return int(float(value))
+                except (ValueError, TypeError):
+                    return 0
+            try:
+                return int(value)
+            except (ValueError, TypeError):
+                return 0
+
+        upvotes = to_int(item.get('upvotes', 0))
+        score = to_int(item.get('score', 0))
+        stars = to_int(item.get('stars', 0))
+        comments = to_int(item.get('comments', 0))
 
         # Any significant engagement passes
         return upvotes > 0 or score > 0 or stars > 0 or comments > 0
@@ -164,6 +180,22 @@ class ContentFilter:
 
     def _calculate_score(self, item: Dict, category: str) -> float:
         """Calculate relevance score for an item"""
+        def to_int(value):
+            """Convert value to int, handling strings and None"""
+            if value is None:
+                return 0
+            if isinstance(value, str):
+                # Remove common formatting (commas, k for thousands, etc.)
+                value = value.replace(',', '').replace('k', '000').replace('K', '000')
+                try:
+                    return int(float(value))
+                except (ValueError, TypeError):
+                    return 0
+            try:
+                return int(value)
+            except (ValueError, TypeError):
+                return 0
+
         score = 0.0
 
         # Priority boost from category config
@@ -184,17 +216,17 @@ class ContentFilter:
             elif days_old == 3:
                 score += 5
 
-        # Engagement boost
-        upvotes = item.get('upvotes', 0)
+        # Engagement boost (convert to int safely)
+        upvotes = to_int(item.get('upvotes', 0))
         score += min(upvotes / 10, 20)  # Max 20 points
 
-        score_metric = item.get('score', 0)
+        score_metric = to_int(item.get('score', 0))
         score += min(score_metric / 10, 20)
 
-        stars = item.get('stars', 0)
+        stars = to_int(item.get('stars', 0))
         score += min(stars / 100, 20)
 
-        comments = item.get('comments', 0)
+        comments = to_int(item.get('comments', 0))
         score += min(comments / 5, 10)
 
         # Source boost (trusted sources get higher score)
