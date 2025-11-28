@@ -1,12 +1,12 @@
 # GitHub Setup Guide
 
-Follow these steps to push your AI Newsletter to GitHub.
+Follow these steps to push This Week in AI to GitHub.
 
 ## Step 1: Create GitHub Repository
 
 1. Go to https://github.com/new
 2. Repository name: `ai-newsletter` (or your preferred name)
-3. Description: "Automated AI news aggregator that delivers curated newsletters"
+3. Description: "This Week in AI - Automated AI news aggregator that delivers curated newsletters"
 4. Choose: **Public** or **Private**
 5. Do NOT initialize with README, .gitignore, or license (we already have these)
 6. Click "Create repository"
@@ -23,7 +23,7 @@ git init
 git add .
 
 # Create initial commit
-git commit -m "Initial commit: AI Newsletter Generator with configurable sources and email delivery"
+git commit -m "Initial commit: This Week in AI - Newsletter generator with configurable sources and email delivery"
 ```
 
 ## Step 3: Connect to GitHub
@@ -161,4 +161,4 @@ Or set up SSH keys: https://docs.github.com/en/authentication/connecting-to-gith
 
 ---
 
-**You're all set! Your AI Newsletter is now on GitHub! 🎉**
+**You're all set! This Week in AI is now on GitHub! 🎉**

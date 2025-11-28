@@ -125,7 +125,7 @@ class EmailTemplate:
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Newsletter - {date_str}</title>
+    <title>This Week in AI - {date_str}</title>
     <style>
         body {{
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
@@ -278,14 +278,14 @@ class EmailTemplate:
 <body>
     <div class="container">
         <div class="header">
-            <h1>🤖 AI Newsletter</h1>
+            <h1>🤖 This Week in AI</h1>
             <div class="subtitle">Your curated AI digest · {date_str}</div>
         </div>
 
         {content}
 
         <div class="footer">
-            <p>Generated automatically by your AI Newsletter system</p>
+            <p>Generated automatically by This Week in AI</p>
             <p>To modify your preferences, edit <code>config.yaml</code></p>
         </div>
     </div>
