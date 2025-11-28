@@ -5,8 +5,8 @@
 email:
   recipient: "your-email@gmail.com"  # Your email address
   sender: "your-email@gmail.com"     # Same as recipient for Gmail
-  sender_name: "AI Newsletter"
-  subject_prefix: "AI Weekly Digest"
+  sender_name: "This Week in AI"
+  subject_prefix: "This Week in AI"
 
   # Gmail SMTP settings
   smtp_server: "smtp.gmail.com"

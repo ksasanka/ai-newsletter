@@ -1,4 +1,4 @@
-# AI Newsletter Generator
+# This Week in AI
 
 An automated newsletter system that curates AI news from multiple sources and delivers a beautiful HTML email digest.
 
@@ -421,4 +421,4 @@ Built with:
 
 ---
 
-**Happy AI news hunting! 🤖📰**
+**Happy reading! 🤖📰**
