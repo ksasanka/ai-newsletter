@@ -17,6 +17,7 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.image import MIMEImage
 import pytz
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 # Import scrapers
 from scrapers.company_blogs import CompanyBlogScraper
@@ -68,8 +69,8 @@ class AINewsletterGenerator:
         logger.info(f"Cache directory: {cache_dir}")
 
     def collect_content(self) -> Dict[str, List[Dict]]:
-        """Collect content from all enabled sources"""
-        logger.info("Starting content collection...")
+        """Collect content from all enabled sources in parallel"""
+        logger.info("Starting content collection (parallel)...")
 
         all_content = {
             'models': [],
@@ -82,47 +83,41 @@ class AINewsletterGenerator:
         days_back = self.config['content']['days_to_look_back']
         start_date = datetime.now() - timedelta(days=days_back)
 
-        # Collect from company blogs
+        # Build list of (name, scraper) tuples for enabled sources
+        scraper_tasks = []
         if self.config['sources']['company_blogs']['enabled']:
-            logger.info("Scraping company blogs...")
-            blog_scraper = CompanyBlogScraper(self.config)
-            blog_content = blog_scraper.scrape_all(start_date)
-            self._categorize_content(blog_content, all_content)
-
-        # Collect from research sources
+            scraper_tasks.append(('company_blogs', CompanyBlogScraper(self.config)))
         if self.config['sources']['research']['enabled']:
-            logger.info("Scraping research sources...")
-            research_scraper = ResearchScraper(self.config)
-            research_content = research_scraper.scrape_all(start_date)
-            self._categorize_content(research_content, all_content)
-
-        # Collect from Reddit
+            scraper_tasks.append(('research', ResearchScraper(self.config)))
         if self.config['sources']['reddit']['enabled']:
-            logger.info("Scraping Reddit...")
-            reddit_scraper = RedditScraper(self.config)
-            reddit_content = reddit_scraper.scrape_all(start_date)
-            self._categorize_content(reddit_content, all_content)
-
-        # Collect from Hacker News
+            scraper_tasks.append(('reddit', RedditScraper(self.config)))
         if self.config['sources']['hackernews']['enabled']:
-            logger.info("Scraping Hacker News...")
-            hn_scraper = HackerNewsScraper(self.config)
-            hn_content = hn_scraper.scrape_all(start_date)
-            self._categorize_content(hn_content, all_content)
-
-        # Collect from Product Hunt
+            scraper_tasks.append(('hackernews', HackerNewsScraper(self.config)))
         if self.config['sources']['producthunt']['enabled']:
-            logger.info("Scraping Product Hunt...")
-            ph_scraper = ProductHuntScraper(self.config)
-            ph_content = ph_scraper.scrape_all(start_date)
-            self._categorize_content(ph_content, all_content)
-
-        # Collect from GitHub
+            scraper_tasks.append(('producthunt', ProductHuntScraper(self.config)))
         if self.config['sources']['github']['enabled']:
-            logger.info("Scraping GitHub...")
-            github_scraper = GitHubScraper(self.config)
-            github_content = github_scraper.scrape_all(start_date)
-            self._categorize_content(github_content, all_content)
+            scraper_tasks.append(('github', GitHubScraper(self.config)))
+
+        if not scraper_tasks:
+            logger.warning("No sources enabled")
+            return all_content
+
+        # Run all scrapers in parallel using ThreadPoolExecutor
+        # I/O-bound tasks benefit greatly from concurrent execution
+        with ThreadPoolExecutor(max_workers=len(scraper_tasks)) as executor:
+            future_to_name = {
+                executor.submit(scraper.scrape_all, start_date): name
+                for name, scraper in scraper_tasks
+            }
+
+            for future in as_completed(future_to_name):
+                name = future_to_name[future]
+                try:
+                    content = future.result()
+                    logger.info(f"Completed scraping {name}: {len(content)} items")
+                    self._categorize_content(content, all_content)
+                except Exception as e:
+                    logger.error(f"Error scraping {name}: {e}")
 
         logger.info("Content collection complete")
         return all_content
